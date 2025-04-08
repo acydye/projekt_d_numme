@@ -182,26 +182,25 @@ plot_dum = y_save;
 
 save('data_dum', 't_dum','y_dum','plot_dum','deltat')
 
+%%
+u0 = [0,0,-4.98,0]; %Start vektor
+h = 1e-4/7; %Initial steglängd
+tol = 1e-10;
+tend = 1.21; %Avslut
 
-% u0 = [0,0,-4.98,0]; %Start vektor
-% h = 1e-4/7; %Initial steglängd
-% tol = 1e-10;
-% tend = 1.21; %Avslut
-% 
-% [ti,yi] = rkf(@dy_func,[0,tend],u0,h); %runge-kutta 4
-% si = get_distance(yi); %Avståndet mellan robot och kulan
-% 
-% j = find_time(ti,yi,h); %Index för punkt innan träff
-% 
-% [t_hit, t_err_int] = interp_time(ti,si,j);
-% 
+[ti,yi] = rkf(@dy_func,[0,tend],u0,h); %runge-kutta 4
+si = get_distance(yi); %Avståndet mellan robot och kulan
+
+j = find_time(ti,yi,h) %Index för punkt innan träff
+
+[t_hit, t_err_int] = interp_time(ti,si,j)
+
 
 
 function distance = get_distance(y_values)
     r_r = y_values(:, 3:4);
     r_b = [zeros(length(y_values(:,1)),1),y_values(:,1)];
     distance = sqrt(sum((r_b - r_r).^2, 2));
-
 end
 
 function [t_meet,err_trunk] = interp_time(t,s,i)
@@ -272,6 +271,7 @@ function index = find_time(t,y,h,limit)
     %Gräns för ändring i derivatan
     tol_max = limit*max(diff_ds);
 
+
     for i = 1:length(diff_ds)
         if abs(diff_ds(i)) > tol_max
             index = i + 2; %omvandling pga central differans
@@ -282,7 +282,8 @@ function index = find_time(t,y,h,limit)
 
 
     %Vill nu interpolera för punkterna innan och hitta t där d(t) = 0
-    % plot(t(index-5:index+2),s(index-5:index+2), 'blue', t(index),s(index),'x')
+    %plot(t(index-5:index+2),s(index-5:index+2), 'blue', t(index),s(index),'x')
+
 
     
 end

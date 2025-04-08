@@ -34,6 +34,7 @@ for i = 1:20
    yPrev = y_ball;
 
 end
+
 %Ser att felet avtar med lutning 1 i loglog plot
 %stämmer överens med framåt euler noggranhetsordning
 subplot(1,2,2);
@@ -52,7 +53,7 @@ grid("on");
 ylabel('y (m)');
 xlabel('t (s)');
 
-%%
+%% osäkerhet i indata
 %Anta osäkerhet i indata på 1%
 %Indatan vi har
 %koefficenterna i differential ekvationen
@@ -95,6 +96,7 @@ function dydt = f(t,y,a,b)
     %a,b - frivillig insättning av andra koefficenter
     %Utdata
     %dydt - Approximativa derivatan för insat y värden
+    
     if nargin == 2
         a = -3;
         b = 0.1;
@@ -102,7 +104,6 @@ function dydt = f(t,y,a,b)
     dydt = zeros([2,1]);
     dydt(1) = y(2);
     dydt(2) = a + b*(y(2).^2);
-
 end
 
 

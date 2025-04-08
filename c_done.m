@@ -61,15 +61,15 @@ for i = 1:n
 end
 
 
-table(fel_y);
-table(fel_t);
+table(fel_y)
+table(fel_t)
 
 %Vill kolla konvergensordningen
 p = (1+sqrt(5))/2; %korrekt
 p_obs = (log(iter_err(3:end))- log(iter_err(2:end-1))) ./ ...
         (log(iter_err(2:end-1)) - log(iter_err(1:end-2)))
 
-konv = iter_err(3:end)./(iter_err(1:end-2).*iter_err(2:end-1));
+konv = iter_err(3:end)./(iter_err(1:end-2).*iter_err(2:end-1))
 
 
 subplot(2,2,[3,4])

@@ -45,16 +45,16 @@ end
 
 %Felet avtar relativt regelbundet men noggranhets ordningen verkar inte
 %vara 4. Men vi använder flera metoder samtidigt
-% loglog(fel(:,1), fel(:,end), '-o')
-% xlabel('Steglängd h')
-% ylabel('Fel i t_{träff}')
-% grid on
-% title('Konvergens av träfftiden')
-% t_hit = fel(end,2);
-% err = fel(:,end);
-% 
-% 
-% p = log2(err(2:max_iter-1)./err(3:max_iter));
+loglog(fel(:,1), fel(:,end), '-o')
+xlabel('Steglängd h')
+ylabel('Fel i t_{träff}')
+grid on
+title('Konvergens av träfftiden')
+t_hit = fel(end,2);
+err = fel(:,end);
+
+
+p = log2(err(2:max_iter-1)./err(3:max_iter));
 
 %% Söker y värdet för kollision
 %t_hit ger rätt kollision, använder bara rungekutta för att hitta
@@ -178,30 +178,29 @@ deltat = 1e-2; %Steglängd i tid
 [~,y_save] = rkf(@dy_func,[0,tend],u0,deltat); %Gör en mindre version för att plotta
 y_dum = [y_hit,error_y,err_storn_y]; %y och felet i y
 t_dum = [t_hit, err_t, err_storn_t]; %t och felet i t
-plot_dum = [t_save,y_save];
+plot_dum = y_save;
 
 save('data_dum', 't_dum','y_dum','plot_dum','deltat')
 
+%%
+u0 = [0,0,-4.98,0]; %Start vektor
+h = 1e-4/7; %Initial steglängd
+tol = 1e-10;
+tend = 1.21; %Avslut
 
-% u0 = [0,0,-4.98,0]; %Start vektor
-% h = 1e-4/7; %Initial steglängd
-% tol = 1e-10;
-% tend = 1.21; %Avslut
-% 
-% [ti,yi] = rkf(@dy_func,[0,tend],u0,h); %runge-kutta 4
-% si = get_distance(yi); %Avståndet mellan robot och kulan
-% 
-% j = find_time(ti,yi,h); %Index för punkt innan träff
-% 
-% [t_hit, t_err_int] = interp_time(ti,si,j);
-% 
+[ti,yi] = rkf(@dy_func,[0,tend],u0,h); %runge-kutta 4
+si = get_distance(yi); %Avståndet mellan robot och kulan
+
+j = find_time(ti,yi,h) %Index för punkt innan träff
+
+[t_hit, t_err_int] = interp_time(ti,si,j)
+
 
 
 function distance = get_distance(y_values)
     r_r = y_values(:, 3:4);
     r_b = [zeros(length(y_values(:,1)),1),y_values(:,1)];
     distance = sqrt(sum((r_b - r_r).^2, 2));
-
 end
 
 function [t_meet,err_trunk] = interp_time(t,s,i)
@@ -272,9 +271,11 @@ function index = find_time(t,y,h,limit)
     %Gräns för ändring i derivatan
     tol_max = limit*max(diff_ds);
 
+
     for i = 1:length(diff_ds)
         if abs(diff_ds(i)) > tol_max
             index = i + 2; %omvandling pga central differans
+
             return
         end
     end
@@ -282,7 +283,8 @@ function index = find_time(t,y,h,limit)
 
 
     %Vill nu interpolera för punkterna innan och hitta t där d(t) = 0
-    % plot(t(index-5:index+2),s(index-5:index+2), 'blue', t(index),s(index),'x')
+    %plot(t(index-5:index+2),s(index-5:index+2), 'blue', t(index),s(index),'x')
+
 
     
 end
