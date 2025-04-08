@@ -1,5 +1,5 @@
 %Secant för att hitta då avståndet är noll mellan robotarna
-addpath(genpath('funktioner'));
+close all; close all; clc;
 
 u0 = [0,0,-4.98,0]; %Start vektor
 h_t = 1e-3; %Initial steglängd för att beräkna tiden
@@ -145,10 +145,7 @@ err_storn_y = storn(1); err_storn_t = storn(2); %Störnings felet
 disp([newline 'Med störning får vi y = ' num2str(y_hit) ' ± ' num2str(err_storn_y) ...
     '(m). t = ' num2str(t_hit,4) ' ± ' num2str(err_storn_t) ' (s).' newline])
 
-%Sparar informationen
-y_b = [y_hit,error_y,err_storn_y]; %y och felet i y
-t_b = [t_hit, err_t, err_storn_t]; %t och felet i t
-save('data_dum', 't_b',y*)
+
 
 
 
@@ -176,7 +173,16 @@ ylabel('Avstånd mellan robot och kulan (m)')
 
 legend()
 
-%% test
+%Sparar informationen
+deltat = 1e-2; %Steglängd i tid
+[~,y_save] = rkf(@dy_func,[0,tend],u0,deltat); %Gör en mindre version för att plotta
+y_dum = [y_hit,error_y,err_storn_y]; %y och felet i y
+t_dum = [t_hit, err_t, err_storn_t]; %t och felet i t
+plot_dum = [t_save,y_save];
+
+save('data_dum', 't_dum','y_dum','plot_dum','deltat')
+
+
 % u0 = [0,0,-4.98,0]; %Start vektor
 % h = 1e-4/7; %Initial steglängd
 % tol = 1e-10;

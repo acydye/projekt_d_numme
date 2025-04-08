@@ -145,11 +145,7 @@ err_storn_y = storn(1); err_storn_t = storn(2); %Störnings felet
 disp([newline 'Med störning får vi y = ' num2str(y_hit) ' ± ' num2str(err_storn_y) ...
     '(m). t = ' num2str(t_hit,4) ' ± ' num2str(err_storn_t) ' (s).' newline])
 
-%Sparar informationen
-y_dum = [y_hit,error_y,err_storn_y]; %y och felet i y
-t_dum = [t_hit, err_t, err_storn_t]; %t och felet i t
-plot_dum = yi(:,3:4);
-save('data_dum', 't_dum','y_dum','plot_dum')
+
 
 
 
@@ -177,7 +173,16 @@ ylabel('Avstånd mellan robot och kulan (m)')
 
 legend()
 
-%% test
+%Sparar informationen
+deltat = 1e-2; %Steglängd i tid
+[~,y_save] = rkf(@dy_func,[0,tend],u0,deltat); %Gör en mindre version för att plotta
+y_dum = [y_hit,error_y,err_storn_y]; %y och felet i y
+t_dum = [t_hit, err_t, err_storn_t]; %t och felet i t
+plot_dum = y_save;
+
+save('data_dum', 't_dum','y_dum','plot_dum','deltat')
+
+
 % u0 = [0,0,-4.98,0]; %Start vektor
 % h = 1e-4/7; %Initial steglängd
 % tol = 1e-10;

@@ -79,6 +79,7 @@ for i = 1:n
 
 end
 
+
 %Felet på grund av osäkerhet blir max värdet av storning_fel vektorn
 input_error = max(storning_fel);
 disp(['Med 1 % osäkerhet i indatan får vi störnings fel på ' num2str(input_error) ...
@@ -104,9 +105,5 @@ function dydt = f(t,y,a,b)
 
 end
 
-%%
-
-%Funktionen tar antal indelningar som indata och returnerar y(0.89)
-%använder rungekutta 4,5
 
 

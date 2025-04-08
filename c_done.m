@@ -67,7 +67,7 @@ table(fel_t);
 %Vill kolla konvergensordningen
 p = (1+sqrt(5))/2; %korrekt
 p_obs = (log(iter_err(3:end))- log(iter_err(2:end-1))) ./ ...
-        (log(iter_err(2:end-1)) - log(iter_err(1:end-2)));
+        (log(iter_err(2:end-1)) - log(iter_err(1:end-2)))
 
 konv = iter_err(3:end)./(iter_err(1:end-2).*iter_err(2:end-1));
 
@@ -161,7 +161,6 @@ disp([newline 'Med en osäkerhet av 1% i indatan får vi följande värden:' new
 %Skapar en plot
 
 orts_smart = @(x) y_ball - (y_ball/x0)*x; %y = y(x) för smarta roboten
-
 yy = linspace(0,y_ball+0.5,100);
 xx = linspace(-0.5, x0,100);
 
@@ -169,7 +168,7 @@ xx = linspace(-0.5, x0,100);
 %Vill spara informationen
 y_smart = [y_ball,err_total_y,y_error_storn];
 t_smart = [t_collision,err_total_t, t_error_storn];
-plot_smart = [xx',orts_smart(xx)'];
+plot_smart = [xx',orts_smart(xx)',];
 
 save('data_smart', 't_smart','y_smart',"plot_smart")
 
@@ -242,16 +241,16 @@ function [t,y,error] = errFunc_y(guess,h)
     error = abs(y_korr-y_get);
 end
 
-function t = newton(g,dg,t0,tol)
-    dt = 1;
-    for i = 1:40
-        dt = g(t0)/dg(t0);
-        t0 = t0 - dt
-        if abs(dt) < tol
-            t = t0;
-        end
-    end
-end
+% function t = newton(g,dg,t0,tol)
+%     dt = 1;
+%     for i = 1:40
+%         dt = g(t0)/dg(t0);
+%         t0 = t0 - dt
+%         if abs(dt) < tol
+%             t = t0;
+%         end
+%     end
+% end
 
 
 function dydt = f(t,y,a,b)
@@ -261,7 +260,7 @@ function dydt = f(t,y,a,b)
     %y - [y, y'] y värden man vill utvärdera
     %a,b - frivillig insättning av andra koefficenter
     %Utdata
-    %dydt - Approximativa derivatan för insat y värden
+    %dydt - Approximativa derivatan för insatt y värden
     if nargin == 2
         a = -3;
         b = 0.1;
