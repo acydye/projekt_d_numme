@@ -1,6 +1,6 @@
 %Vill hitta skillnad i tid för dumma och smarta roboten
 %Importerar datan 'data_smart' och 'data_dum'
-clear all; clc;
+clear all; clc; close all;
 
 if ~exist('data_smart.mat') || ~exist('data_dum.mat')
     error('Filerna saknas')

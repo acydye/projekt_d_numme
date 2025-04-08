@@ -1,5 +1,5 @@
 %Secant för att hitta då avståndet är noll mellan robotarna
-addpath(genpath('funktioner'));
+close all; close all; clc;
 
 u0 = [0,0,-4.98,0]; %Start vektor
 h_t = 1e-3; %Initial steglängd för att beräkna tiden

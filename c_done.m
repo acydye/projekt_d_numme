@@ -1,6 +1,6 @@
 %Använda runge-kutta 4, inskjutning och sekant metoden för att lösa
 %systemet. 
-clear all
+clear all; clc; close all;
 
 h = 1e-5; %Steglängd för rk-4
 tol_sec = 1e-15; %Tolerans för sekant funktionen
