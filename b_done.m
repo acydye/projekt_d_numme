@@ -43,18 +43,18 @@ for i = 1:max_iter
 
 end
 
-%Felet avtar relativt regelbundet men noggranhets ordningen verkar inte
-%vara 4. Men vi använder flera metoder samtidigt
-% loglog(fel(:,1), fel(:,end), '-o')
-% xlabel('Steglängd h')
-% ylabel('Fel i t_{träff}')
-% grid on
-% title('Konvergens av träfftiden')
-% t_hit = fel(end,2);
-% err = fel(:,end);
-% 
-% 
-% p = log2(err(2:max_iter-1)./err(3:max_iter));
+% Felet avtar relativt regelbundet men noggranhets ordningen verkar inte
+% vara 4. Men vi använder flera metoder samtidigt
+% % loglog(fel(:,1), fel(:,end), '-o')
+% % xlabel('Steglängd h')
+% % ylabel('Fel i t_{träff}')
+% % grid on
+% % title('Konvergens av träfftiden')
+% % t_hit = fel(end,2);
+% % err = fel(:,end);
+% % 
+% % 
+% % p = log2(err(2:max_iter-1)./err(3:max_iter));
 
 %% Söker y värdet för kollision
 %t_hit ger rätt kollision, använder bara rungekutta för att hitta
@@ -86,8 +86,8 @@ for i = 1:y_iter
         error_y_storn = max( [abs(y_hit-y_storn_1(end,1)), abs(y_hit-y_storn_2(end,1))]); %Maximal skillnad
         error_y = dy + error_y_storn; %Lägger ihop för att få total fel
 
-        disp(['Runge-kutta 4 get att vid t = ' num2str(abs(t_hit),8) ...
-    '  ± ' num2str(err_t) ' (s)' newline 'har bollen rullat ' num2str(y_hit,8) ...
+        disp(['Runge-kutta 4 get att vid t = ' num2str(abs(t_hit),11) ...
+    '  ± ' num2str(err_t) ' (s)' newline 'har bollen rullat ' num2str(y_hit,11) ...
     '  ± ' num2str(error_y) ' (m)' newline]);
 
        break 
@@ -191,7 +191,7 @@ tend = 1.21; %Avslut
 [ti,yi] = rkf(@dy_func,[0,tend],u0,h); %runge-kutta 4
 si = get_distance(yi); %Avståndet mellan robot och kulan
 
-j = find_time(ti,yi,h) %Index för punkt innan träff
+j = find_time(ti,yi,h); %Index för punkt innan träff
 
 [t_hit, t_err_int] = interp_time(ti,si,j)
 
@@ -282,9 +282,7 @@ function index = find_time(t,y,h,limit)
 
 
     %Vill nu interpolera för punkterna innan och hitta t där d(t) = 0
-    %plot(t(index-5:index+2),s(index-5:index+2), 'blue', t(index),s(index),'x')
-
-
+    plot(t(index-5:index+2),s(index-5:index+2), 'blue', t(index),s(index),'x')
     
 end
 
