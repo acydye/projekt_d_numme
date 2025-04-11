@@ -191,9 +191,9 @@ tend = 1.21; %Avslut
 [ti,yi] = rkf(@dy_func,[0,tend],u0,h); %runge-kutta 4
 si = get_distance(yi); %Avståndet mellan robot och kulan
 
-j = find_time(ti,yi,h) %Index för punkt innan träff
+j = find_time(ti,yi,h); %Index för punkt innan träff
 
-[t_hit, t_err_int] = interp_time(ti,si,j)
+[t_hit, t_err_int] = interp_time(ti,si,j);
 
 
 
