@@ -26,7 +26,7 @@ for i = 1:20
         fel(i,1:3) = [y_ball,h,0];
     end
     if dy < tol
-        disp(['Runge-kutta 4 get att vid t = 0.89 s har bollen rullat ' num2str(abs(y_ball),8) ...
+        disp(['Runge-kutta 4 get att vid t = 0.89 s har bollen rullat ' num2str(abs(y_ball),11) ...
     '  ± ' num2str(dy) ' (m)' newline])
        break 
     end
