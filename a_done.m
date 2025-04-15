@@ -38,7 +38,7 @@ end
 %Ser att felet avtar med lutning 1 i loglog plot
 %stämmer överens med framåt euler noggranhetsordning
 subplot(1,2,2);
-plot(log(fel(:,2)),log(fel(:,3)));
+plot(log(fel(:,2)),log(fel(:,3;
 title('Loglog plot h/dy');
 grid("on");
 ylabel('log(dy)');

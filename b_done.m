@@ -45,16 +45,16 @@ end
 
 % Felet avtar relativt regelbundet men noggranhets ordningen verkar inte
 % vara 4. Men vi använder flera metoder samtidigt
-% % loglog(fel(:,1), fel(:,end), '-o')
-% % xlabel('Steglängd h')
-% % ylabel('Fel i t_{träff}')
-% % grid on
-% % title('Konvergens av träfftiden')
-% % t_hit = fel(end,2);
-% % err = fel(:,end);
-% % 
-% % 
-% % p = log2(err(2:max_iter-1)./err(3:max_iter));
+% loglog(fel(:,1), fel(:,end), '-o')
+% xlabel('Steglängd h')
+% ylabel('Fel i t_{träff}')
+% grid on
+% title('Konvergens av träfftiden')
+% t_hit = fel(end,2);
+% err = fel(:,end);
+% 
+% 
+% p = log2(err(2:max_iter-1)./err(3:max_iter));
 
 %% Söker y värdet för kollision
 %t_hit ger rätt kollision, använder bara rungekutta för att hitta
