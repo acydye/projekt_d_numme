@@ -38,8 +38,8 @@ end
 %Ser att felet avtar med lutning 1 i loglog plot
 %stämmer överens med framåt euler noggranhetsordning
 subplot(1,2,2);
-plot(log(fel(:,2)),log(fel(:,3;
-title('Loglog plot h/dy');
+plot(log(fel(:,2)),log(fel(:,3)))
+title('Loglog plot dy = dy(h)');
 grid("on");
 ylabel('log(dy)');
 xlabel('log(h)');
@@ -48,7 +48,7 @@ table(fel(:,1),fel(:,2),fel(:,3),'VariableNames',{'y', 'h','dy'})
 %Plot över t m.a.p y
 subplot(1,2,1);
 plot(t_n, u_n(:,1), "blue", 0.89,y_ball,'X');
-title('plot av t gentemot y');
+title('plot y = y(t)');
 grid("on");
 ylabel('y (m)');
 xlabel('t (s)');

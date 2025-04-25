@@ -153,25 +153,29 @@ disp([newline 'Med störning får vi y = ' num2str(y_hit) ' ± ' num2str(err_sto
 %Plotta roboten och kulan
 figure();
 
-subplot(1,2,1)
-plot(zeros(length(yi(:,1)),1),yi(:,1),'Blue','DisplayName','Kulans lägeskurva', 'LineWidth', 1)
-hold on
-plot(yi(:,3),yi(:,4),'red', 'DisplayName', 'Robotens lägeskurva', 'lineWidth', 1)
-plot(0,y_hit,'X', 'MarkerSize',10, 'displayName','Träff', 'Color','Black')
-xlim([-5,1])
-grid('on')
-ylabel('Y')
-xlabel('X')
-hold off
-legend(Position=[0.2,0.2,0.2,0.2])
+% subplot(1,2,1)
+% plot(zeros(length(yi(:,1)),1),yi(:,1),'Blue','DisplayName','Kulans lägeskurva', 'LineWidth', 1)
+% hold on
+% plot(yi(:,3),yi(:,4),'red', 'DisplayName', 'Robotens lägeskurva', 'lineWidth', 1)
+% plot(0,y_hit,'X', 'MarkerSize',10, 'displayName','Träff', 'Color','Black')
+% xlim([-5,1])
+% grid('on')
+% ylabel('Y')
+% xlabel('X')
+% hold off
+% legend(Position=[0.2,0.2,0.2,0.2])
 
-subplot(1,2,2)
+% subplot(1,2,2)
 dist = get_distance(yi);
-plot(ti,dist, 'black', ti(i_hit),dist(i_hit), 'X', 'LineWidth', 1, 'MarkerSize', 10)
+plot(ti(end-1050:end-990),dist(end-1050:end-990), 'black', 'LineWidth', 1, 'MarkerSize', 10, 'DisplayName','d = d(t)')
+xlim([1.20586166365831,1.20613])
+ylim([-0.00003062231693386406,0.00009222365663980835])
 xlabel('tid (s)')
 ylabel('Avstånd mellan robot och kulan (m)')
 
 legend()
+
+matlab2tikz('Plot_distance_b.tex')
 
 %Sparar informationen
 deltat = 1e-2; %Steglängd i tid
@@ -248,7 +252,7 @@ function index = find_time(t,y,h,limit)
     %apprxoimera derivatan med centraldifferenser. 
     %
     %Indata
-    %(t,y) - värden av t samt position från rungekutta-4
+    %(t,y) - värden av t samt position från rungekutta-4f
     %h - steglängden som användes i rungekutta-4
     %limit - gräns för skillnad i derivatan m.a.p största skillnaden
     %Utdata:
@@ -275,6 +279,7 @@ function index = find_time(t,y,h,limit)
     for i = 1:length(diff_ds)
         if abs(diff_ds(i)) > tol_max
             index = i + 2; %omvandling pga central differans
+            plot(t(index-10:index+4),s(index-10:index+4), 'blue', t(index),s(index),'x')
             return
         end
     end
