@@ -47,11 +47,13 @@ table(fel(:,1),fel(:,2),fel(:,3),'VariableNames',{'y', 'h','dy'})
 
 %Plot över t m.a.p y
 subplot(1,2,1);
-plot(t_n, u_n(:,1), "blue", 0.89,y_ball,'X');
+plot(t_n([1:10:end, end]), u_n([1:10:end, end],1), "blue", 0.89,y_ball,'X');
 title('plot y = y(t)');
 grid("on");
 ylabel('y (m)');
 xlabel('t (s)');
+
+matlab2tikz('fel_position_a.tex')
 
 %% osäkerhet i indata
 %Anta osäkerhet i indata på 1%
