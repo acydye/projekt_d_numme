@@ -127,6 +127,7 @@ fel_storn = zeros(n,2); %Förallokering
 %Varje iteration av loopen stör indatan slumpmässigt inom osäkerheten för
 %att sedan beräkna t (collision), y (höjd vid collision), och sedan beräkna
 %skillnaden från de störda värden och de ostörda värden.
+%Använder min o max störnings beräkning
 
 for i = 1:n
     % 2*rand(1)-1;
@@ -141,17 +142,25 @@ for i = 1:n
 
     t_storn = -x_storn/(v*cos(psi_storn)); %Tiden för collision
     y_storn = x_storn*tan(-psi_storn); %Position för y
-    fel_storn(i,:) = [abs(y_storn-y_ball), abs(t_storn-t_collision)]; %Fel pga osäkerhet
+    fel_storn(i,:) = [abs(y_storn), abs(t_storn)]; %Fel pga osäkerhet
 end
 
 %Total felet från störning blir maximum av alla fel
 fel_storn;
-y_error_storn = max(fel_storn(:,1)); %Fel i träff värdet för y
-t_error_storn = max(fel_storn(:,2)); %Fel i träff tiden för t;
+y_storn_max = max(fel_storn(:,1)); %Fel i träff värdet för y
+y_storn_min = min(fel_storn(:,1)); %Fel i träff värdet för y
+t_storn_max = max(fel_storn(:,2)); %Fel i träff tiden för t;
+t_storn_min = min(fel_storn(:,2)); %Fel i träff tiden för t;
+
+y_storn = (y_storn_min+y_storn_max)/2;
+y_error_storn = (y_storn_max - y_storn_min)/2;
+t_storn = (t_storn_min+t_storn_max)/2;
+t_error_storn = (t_storn_max - t_storn_min)/2;
+
 
 disp([newline 'Med en osäkerhet av 1% i indatan får vi följande värden:' newline ...
-    'y = ' num2str(y_ball,3), ' ± ' num2str(y_error_storn,2) ' (m)' newline ...
-    't = ' num2str(t_collision, 3) ' ± ' num2str(t_error_storn,2) ' (s)' newline ])
+    'y = ' num2str(y_storn,2), ' ± ' num2str(y_error_storn,2) ' (m)' newline ...
+    't = ' num2str(t_storn, 3) ' ± ' num2str(t_error_storn,1) ' (s)' newline ])
 
 
 
