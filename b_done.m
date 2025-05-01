@@ -42,7 +42,16 @@ for i = 1:max_iter
    t_prev = t_hit;
 
 end
-fel
+t_deci = floor(abs(log10(err_t)));
+round(t_hit,t_deci);
+t_err_pres = abs(t_hit - round(t_hit,t_deci)); %presentations fel
+
+%totala felet
+err_t_tot = t_err_pres + err_t
+t_hit_pres = round(t_hit,t_deci)
+h_t
+
+
 % Felet avtar relativt regelbundet men noggranhets ordningen verkar inte
 % vara 4. Men vi använder flera metoder samtidigt
 loglog(fel(:,1), fel(:,end), '-o')
@@ -54,7 +63,7 @@ t_hit = fel(end,2);
 err = fel(:,end);
 
 
-p = log2(err(2:max_iter-1)./err(3:max_iter))
+p = log2(err(2:max_iter-1)./err(3:max_iter));
 mean(p)
 
 %% Söker y värdet för kollision
@@ -85,18 +94,26 @@ for i = 1:y_iter
         [~,y_storn_2] = rkf(@dy_func,[0,t_hit-err_t],u0,h_y); %Stör ner
 
         error_y_storn = max( [abs(y_hit-y_storn_1(end,1)), abs(y_hit-y_storn_2(end,1))]); %Maximal skillnad
-        error_y = dy + error_y_storn; %Lägger ihop för att få total fel
+        err_y = dy + error_y_storn; %Lägger ihop för att få total fel
 
-        disp(['Runge-kutta 4 get att vid t = ' num2str(abs(t_hit),11) ...
-    '  ± ' num2str(err_t) ' (s)' newline 'har bollen rullat ' num2str(y_hit,11) ...
-    '  ± ' num2str(error_y) ' (m)' newline]);
+
 
        break 
     end
    h_y = h_y/2;
    yPrev = y_hit;
-
 end
+y_deci = floor(abs(log10(err_y)));
+round(y_hit,y_deci);
+err_y_pres = abs(y_hit - round(y_hit,y_deci)); %presentations fel
+
+%totala felet
+err_y_tot = err_y_pres + err_y
+y_hit_pres = round(y_hit,y_deci)
+h_y
+disp(['Runge-kutta 4 get att vid t = ' num2str(abs(t_hit_pres),11) ...
+'  ± ' num2str(err_t_tot,1) ' (s)' newline 'har bollen rullat ' num2str(y_hit_pres,11) ...
+'  ± ' num2str(err_y_pres,1) ' (m)' newline]);
 
 %% störningsräkning
 %Stör indata med 1%
@@ -181,7 +198,7 @@ matlab2tikz('Plot_distance_b.tex')
 %Sparar informationen
 deltat = 1e-2; %Steglängd i tid
 [~,y_save] = rkf(@dy_func,[0,tend],u0,deltat); %Gör en mindre version för att plotta
-y_dum = [y_hit,error_y,err_storn_y]; %y och felet i y
+y_dum = [y_hit,err_y,err_storn_y]; %y och felet i y
 t_dum = [t_hit, err_t, err_storn_t]; %t och felet i t
 plot_dum = y_save;
 

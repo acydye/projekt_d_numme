@@ -3,7 +3,7 @@
 clear all; clc; close all;
 
 h = 1e-5; %Steglängd för rk-4
-tol_sec = 1e-15; %Tolerans för sekant funktionen
+tol_sec = 1e-14; %Tolerans för sekant funktionen
 
 
 phi_1 = 3.4; phi_2 = 3.6; %Start gissning för sekant metoden
@@ -61,11 +61,11 @@ for i = 1:n
 end
 
 
-table(fel_y)
-table(fel_t)
+table(fel_y);
+table(fel_t);
 
 %Vill kolla konvergensordningen
-p = (1+sqrt(5))/2; %korrekt
+
 p_obs = (log(iter_err(3:end))- log(iter_err(2:end-1))) ./ ...
         (log(iter_err(2:end-1)) - log(iter_err(1:end-2)))
 

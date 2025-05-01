@@ -58,19 +58,23 @@ disp(['ΔΔt/Δt(osäkherhet) = ' num2str(t_diff_storn/t_diff*100) ' %' newline]
 width = 1;
 figure;
 hold on
+
 plot([0,0],[0,y_dum_r(end)-0.3],'Blue','DisplayName','Kulans lägeskurva', ...
     'linestyle','--', 'LineWidth', 1)
-plot(x_dum_r,y_dum_r,'red', 'DisplayName', 'Dumma roboten', 'lineWidth', width)
-plot(x_smart_r,y_smart_r, 'green','DisplayName', 'Smarta roboten','lineWidth',width)
+plot(x_dum_r(1:5:end),y_dum_r(1:5:end),'red', 'DisplayName', 'Dumma roboten', 'lineWidth', width)
+x_smart_r = flip(x_smart_r); y_smart_r = flip(y_smart_r);
+plot(x_smart_r(1:10:end),y_smart_r(1:10:end), 'green','DisplayName', 'Smarta roboten','lineWidth',width)
 
-plot([0,0],[y_smart,y_dum],'X','MarkerSize',10,'Color','Black','DisplayName', ...
-    'Träff')
+plot(0,y_smart,'O','MarkerSize',10,'Color','Black','DisplayName', ...
+    'Träff (smart)')
 
+plot(0,y_dum,'x','MarkerSize',10, 'linewidth',1.3,'Color','Black','DisplayName', ...
+    'Träff (smart)')
 xlabel('x (m)'); ylabel('y (m)');
 title('Plot över kulan och roboternas rörelse')
-axis('equal')
-xlim([-0.5,0.5])
-ylim([y_dum_r(end)-0.2,y_smart_r(end)+0.2])
+
+%xlim([-0.5,0.5])
+%ylim([y_dum_r(end)-0.2,y_smart_r(end)+0.2])
 
 grid on
 
@@ -82,7 +86,7 @@ legend('Location','southeast')
 
 
 
-
+%%
 
 % Setup animation
 figure;
