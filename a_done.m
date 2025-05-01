@@ -34,6 +34,18 @@ for i = 1:20
    yPrev = y_ball;
 
 end
+decimaler = floor(abs(log10(dy)));
+round(y_ball,decimaler);
+err_pres = abs(y_ball - round(y_ball,decimaler)); %presentations fel
+
+%totala felet
+y_err = err_pres + dy;
+y_ball = round(y_ball,decimaler);
+disp(['h = ' num2str(h)])
+disp(['Med perfect indata blir felet  ' num2str(y_err,1) ...
+    ' (m)' newline 'får vi att y(0.89) = ' num2str(y_ball,decimaler+1) ' ± ' ...
+    num2str(y_err,1) ' (m)'] )
+
 
 %Ser att felet avtar med lutning 1 i loglog plot
 %stämmer överens med framåt euler noggranhetsordning
@@ -66,28 +78,35 @@ a = -3; b = 0.1;
 err_a = abs(-3*0.01);
 err_b = abs(0.1*0.01); %Osäkerhet i indata
 
-n = 50; %Antal gånger att störa
-storning_fel = zeros([n,1]); %Förallokerar störnings fel vektor
+%Störnings räkning
 
 
-for i = 1:n
-    %Varierar a och b med ett slumpmässigt tal inom osäkerheten
-    a_storn = a + (2*rand(1)-1)*err_a; b_storn = b + (2*rand(1)-1)*err_b;
-    
-    %Räknar ut y värdena med de störda värden
-    f_storn = @(t,y) f(t,y,a_storn,b_storn);
-    [t_storn,y_storn] = rkf(f_storn, [0,t_end], u0,h);
-    storning_fel(i,1) = abs(y_storn(end,1)-y_ball); %Störnings fel
-    
+%Varierar a och b med ett slumpmässigt tal inom osäkerheten
+a_storn = a + err_a; b_storn = b + err_b;
 
-end
+%Räknar ut y värdena med de störda värden
+f_storn_a = @(t,y) f(t,y,a_storn,b); % stör a
+f_storn_b = @(t,y) f(t,y,a,b_storn); % stör b
+
+[~,y_storn_a] = rkf(f_storn_a, [0,t_end], u0,h);
+[~,y_storn_b] = rkf(f_storn_b, [0,t_end], u0,h);
+storn_err_tab = abs(y_ball - y_storn_b(end,1)) + abs(y_ball - y_storn_a(end,1));
+y_ball_storn = round(y_ball,2, "significant");
+storn_err_pres = abs(y_ball_storn-y_ball); %presentations fel
+
+%totala felet blir summan
+storn_err_pres + storn_err_tab;
+storn_err_pres = ceil((storn_err_pres + storn_err_tab)*100)/100;
+
+
+
 
 
 %Felet på grund av osäkerhet blir max värdet av storning_fel vektorn
-input_error = max(storning_fel);
-disp(['Med 1 % osäkerhet i indatan får vi störnings fel på ' num2str(input_error) ...
-    ' (m)' newline 'Med störd indata får vi att y(0.89) = ' num2str(y_ball,3) ' ± ' ...
-    num2str(input_error+dy,3) ' (m)'] )
+
+disp(['Med 1 % osäkerhet i indatan får vi störnings fel på ' num2str(storn_err_pres) ...
+    ' (m)' newline 'Med störd indata får vi att y(0.89) = ' num2str(y_ball_storn) ' ± ' ...
+    num2str(storn_err_pres,1) ' (m)'] )
 
 
 function dydt = f(t,y,a,b)
