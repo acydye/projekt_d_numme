@@ -130,8 +130,9 @@ a = -3; err_a = 0.03; b = 0.1; err_b = 1e-3;
 
 n_storn = 5; %Antal gånger att störa indatan
 fel_storn = zeros([n_storn,2]);
+storn_list = diag([1,1,1,1])
 
-for i = 1:n_storn
+for i = 1:4
 
     %Störd indata
     a_storn = a + (2*rand(1)-1)*err_a; b_storn = b + (2*rand(1)-1)*err_b;
