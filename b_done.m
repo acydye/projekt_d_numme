@@ -3,10 +3,10 @@ close all; close all; clc;
 
 u0 = [0,0,-4.98,0]; %Start vektor
 h_t = 1e-3; %Initial steglängd för att beräkna tiden
-tol = 1e-11;
+tol = 1e-10;
 tend = 1.21; %Avslut
 
-max_iter = 10; %Max antal halveringar
+max_iter = 9; %Max antal halveringar
 
 
 %förallokerar
@@ -28,7 +28,7 @@ for i = 1:max_iter
     if i > 1
 
         dt = abs(t_hit - t_prev); %Trunkerings fel.
-        err_t = dt + t_err_int;
+        err_t = dt + t_err_int
         fel(i,:) = [h_t, t_hit, dt,t_err_int,err_t];
     else
         fel(i,:) = [h_t,t_hit,0,0,0];
@@ -63,8 +63,8 @@ t_hit = fel(end,2);
 err = fel(:,end);
 
 
-p = log2(err(2:max_iter-1)./err(3:max_iter));
-mean(p)
+p = log2(err(2:max_iter-1)./err(3:max_iter))
+
 
 %% Söker y värdet för kollision
 %t_hit ger rätt kollision, använder bara rungekutta för att hitta
@@ -82,7 +82,7 @@ for i = 1:y_iter
     y_hit = u_n(end,1);
     if i > 1
 
-        dy = abs(yPrev-y_hit);
+        dy = abs(yPrev-y_hit)
         fel(i,1:3) = [y_hit, h_y, dy];
     else
         fel(i,1:3) = [y_hit,h_y,0];
@@ -128,15 +128,17 @@ u = [0,0,-4.98,0]; err_u = abs(0.01*u0);
 a = -3; err_a = 0.03; b = 0.1; err_b = 1e-3;
 
 
-n_storn = 5; %Antal gånger att störa indatan
+n_storn = 4; %Antal gånger att störa indatan
 fel_storn = zeros([n_storn,2]);
-storn_list = diag([1,1,1,1])
+storn_list = diag([1,1,1,1]);
 
-for i = 1:4
+for i = 1:n_storn
 
-    %Störd indata
-    a_storn = a + (2*rand(1)-1)*err_a; b_storn = b + (2*rand(1)-1)*err_b;
-    u_storn = u + (2*rand(1)-1)*err_u; v_storn = v + (2*rand(1)-1)*err_v;
+    %Stör indatan en åt gången
+    a_storn = a + storn_list(1,i)*err_a; 
+    b_storn = b + storn_list(2,i)*err_b; 
+    u_storn = u + storn_list(3,i)*err_u;
+    v_storn = v + storn_list(4,i)*err_v;
 
     %Störd funktion för runge-kutta 4
     dy_func_storn = @(t,y) dy_func(t,y,v_storn,a_storn,b_storn);
@@ -144,7 +146,7 @@ for i = 1:4
     %Tid vid störning
     [t_storn,y_storn] = rkf(dy_func_storn,[0,tend],u_storn,h_t); %runge-kutta 4
     s_storn = get_distance(y_storn); %Avståndet mellan robot och kulan
-    i_storn = find_time(t_storn,y_storn,h_t,0.1); %Index för punkt innan träff
+    i_storn = find_time(t_storn,y_storn,h_t); %Index för punkt innan träff
     [t_hit_storn, ~] = interp_time(t_storn,s_storn,i_storn); %Interpolerar för att hitta nollstället
 
     %Ortsvektorns y-värde vid störning
@@ -154,15 +156,25 @@ for i = 1:4
     %Lista med felet i y, samt t.
     fel_storn(i,:) = [abs(y_hit_storn-y_hit),abs(t_hit-t_hit_storn)];
 
-
-
 end
 
-storn = max(fel_storn,[],1); %Max felet i t och y,
+storn = sum(fel_storn); %Max felet i t och y,
 err_storn_y = storn(1); err_storn_t = storn(2); %Störnings felet
 
-disp([newline 'Med störning får vi y = ' num2str(y_hit) ' ± ' num2str(err_storn_y) ...
-    '(m). t = ' num2str(t_hit,4) ' ± ' num2str(err_storn_t) ' (s).' newline])
+y_storn_deci = floor(abs(log10(err_storn_y)));
+t_storn_deci = floor(abs(log10(err_storn_t)));
+
+storn_y_pres = abs(y_hit - round(y_hit,y_storn_deci)); %presentations fel
+storn_t_pres = abs(t_hit - round(t_hit,t_storn_deci)); %presentations fel
+
+ystorn_err = ceil((storn_y_pres + err_storn_y)*10)/10; %Totala felet med presentations fel (avrundat up)
+ystorn_hit_pres = round(y_hit,y_storn_deci); %Värdet som presenteras
+
+tstorn_err = ceil((storn_t_pres + err_storn_t)*10)/10; %Totala felet med presentations fel (avrundat up)
+tstorn_hit_pres = round(t_hit,t_storn_deci); %Värdet som presenteras
+
+disp([newline 'Med störning får vi y = ' num2str(ystorn_hit_pres) ' ± ' num2str(ystorn_err) ...
+    '(m). t = ' num2str(tstorn_hit_pres) ' ± ' num2str(tstorn_err) ' (s).' newline])
 
 
 
@@ -206,19 +218,6 @@ plot_dum = y_save;
 save('data_dum', 't_dum','y_dum','plot_dum','deltat')
 
 %%
-u0 = [0,0,-4.98,0]; %Start vektor
-h = 1e-4/7; %Initial steglängd
-tol = 1e-10;
-tend = 1.21; %Avslut
-
-[ti,yi] = rkf(@dy_func,[0,tend],u0,h); %runge-kutta 4
-si = get_distance(yi); %Avståndet mellan robot och kulan
-
-j = find_time(ti,yi,h); %Index för punkt innan träff
-
-[t_hit, t_err_int] = interp_time(ti,si,j);
-
-
 
 function distance = get_distance(y_values)
     r_r = y_values(:, 3:4);
