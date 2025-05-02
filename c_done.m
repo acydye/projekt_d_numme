@@ -3,7 +3,7 @@
 clear all; clc; close all;
 
 h = 1e-5; %Steglängd för rk-4
-tol_sec = 1e-14; %Tolerans för sekant funktionen
+tol_sec = 1e-13; %Tolerans för sekant funktionen
 
 
 phi_1 = 3.4; phi_2 = 3.6; %Start gissning för sekant metoden
@@ -69,7 +69,8 @@ table(fel_t);
 p_obs = (log(iter_err(3:end))- log(iter_err(2:end-1))) ./ ...
         (log(iter_err(2:end-1)) - log(iter_err(1:end-2)))
 
-konv = iter_err(3:end)./(iter_err(1:end-2).*iter_err(2:end-1))
+konv = iter_err(3:end)./(iter_err(1:end-2).*iter_err(2:end-1));
+table(konv)
 
 
 subplot(2,2,[3,4])
@@ -95,14 +96,21 @@ title('Fel i t (tid) gentemot steglängd')
 
 
 
+%Beräkna presentations fel
+[y_ball_round,err_y_pres] = avrunda(y_ball,err_total_y);
+err_y = err_total_y + err_y_pres;
+[t_round,err_t_pres] = avrunda(t_collision,err_total_t);
+err_t = err_total_t + err_t_pres;
+
+
 
 
 %Visar värdena och fel för användaren
 disp([newline 'Vinkeln theta = ' num2str(psi,10) ' ± ' num2str(error_y_secant,3) ...
     ' (rad) ger korrekt start vinkel' newline ...
-    'Smarta roboten och kulan träffas då vid t = ' num2str(t_collision,15) ' ± ' ...
-    num2str(err_total_t,3) '(s)' newline ...
-    'och vid y = ' num2str(y_ball,10) ' ± ' num2str(err_total_y) ' (m)' newline ])
+    'Smarta roboten och kulan träffas då vid t = ' num2str(t_round,15) ' ± ' ...
+    num2str(err_t) '(s)' newline ...
+    'och vid y = ' num2str(y_ball_round,16) ' ± ' num2str(err_y) ' (m)' newline ])
 
 
 

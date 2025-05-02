@@ -56,20 +56,21 @@ disp(['ΔΔt/Δt(osäkherhet) = ' num2str(t_diff_storn/t_diff*100) ' %' newline]
 
 %plot
 width = 1;
+m_width = 1.3;
 figure;
 hold on
 
-plot([0,0],[0,y_dum_r(end)-0.3],'Blue','DisplayName','Kulans lägeskurva', ...
+plot([0,0],[0,y_dum_r(end)-0.3],'black','DisplayName','Kulan', ...
     'linestyle','--', 'LineWidth', 1)
 plot(x_dum_r(1:5:end),y_dum_r(1:5:end),'red', 'DisplayName', 'Dumma roboten', 'lineWidth', width)
 x_smart_r = flip(x_smart_r); y_smart_r = flip(y_smart_r);
-plot(x_smart_r(1:10:end),y_smart_r(1:10:end), 'green','DisplayName', 'Smarta roboten','lineWidth',width)
+plot(x_smart_r(1:10:end),y_smart_r(1:10:end), 'blue','DisplayName', 'Smarta roboten','lineWidth',width)
 
-plot(0,y_smart,'O','MarkerSize',10,'Color','Black','DisplayName', ...
+plot(0,y_smart,'ko','MarkerSize',7,'linewidth',m_width,'Color','blue','DisplayName', ...
     'Träff (smart)')
 
-plot(0,y_dum,'x','MarkerSize',10, 'linewidth',1.3,'Color','Black','DisplayName', ...
-    'Träff (smart)')
+plot(0,y_dum,'ko','MarkerSize',7, 'linewidth',m_width,'Color','red','DisplayName', ...
+    'Träff (dum)')
 xlabel('x (m)'); ylabel('y (m)');
 title('Plot över kulan och roboternas rörelse')
 
@@ -77,6 +78,7 @@ title('Plot över kulan och roboternas rörelse')
 %ylim([y_dum_r(end)-0.2,y_smart_r(end)+0.2])
 
 grid on
+matlab2tikz('resultat_kurva.tex')
 
 
 
