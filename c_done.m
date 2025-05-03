@@ -100,7 +100,7 @@ title('Fel i t (tid) gentemot steglängd')
 [y_ball_round,err_y_pres] = avrunda(y_ball,err_total_y);
 err_y = err_total_y + err_y_pres;
 [t_round,err_t_pres] = avrunda(t_collision,err_total_t);
-err_t = err_total_t + err_t_pres;
+err_t = err_total_t + err_t_pres
 
 
 
@@ -164,6 +164,8 @@ y_storn = (y_storn_min+y_storn_max)/2;
 y_error_storn = (y_storn_max - y_storn_min)/2;
 t_storn = (t_storn_min+t_storn_max)/2;
 t_error_storn = (t_storn_max - t_storn_min)/2;
+
+
 
 
 disp([newline 'Med en osäkerhet av 1% i indatan får vi följande värden:' newline ...

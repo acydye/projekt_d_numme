@@ -49,23 +49,27 @@ disp(['Med perfect indata blir felet  ' num2str(y_err,1) ...
 
 %Ser att felet avtar med lutning 1 i loglog plot
 %stämmer överens med framåt euler noggranhetsordning
-subplot(1,2,2);
-plot(log(fel(:,2)),log(fel(:,3)))
-title('Loglog plot dy = dy(h)');
-grid("on");
-ylabel('log(dy)');
-xlabel('log(h)');
-table(fel(:,1),fel(:,2),fel(:,3),'VariableNames',{'y', 'h','dy'})
+% subplot(1,2,2);
+% plot(log(fel(:,2)),log(fel(:,3)))
+% title('Loglog plot dy = dy(h)');
+% grid("on");
+% ylabel('log(dy)');
+% xlabel('log(h)');
+% table(fel(:,1),fel(:,2),fel(:,3),'VariableNames',{'y', 'h','dy'})
 
 %Plot över t m.a.p y
-subplot(1,2,1);
-plot(t_n([1:10:end, end]), u_n([1:10:end, end],1), "blue", 0.89,y_ball,'X');
-title('plot y = y(t)');
+% subplot(1,2,1);
+plot(t_n([1:10:end, end]), u_n([1:10:end, end],1), "black",'displayname','y = y(t)'),;
+hold on
+plot(0.89,y_ball,'ko', 'linewidth',1.3,'color','red', 'displayname','y(0.89(s))')
+hold off
+title('Kulans position');
 grid("on");
 ylabel('y (m)');
 xlabel('t (s)');
+legend()
 
-matlab2tikz('fel_position_a.tex')
+matlab2tikz('plot_kula.tex')
 
 %% osäkerhet i indata
 %Anta osäkerhet i indata på 1%
@@ -90,7 +94,7 @@ f_storn_b = @(t,y) f(t,y,a,b_storn); % stör b
 
 [~,y_storn_a] = rkf(f_storn_a, [0,t_end], u0,h);
 [~,y_storn_b] = rkf(f_storn_b, [0,t_end], u0,h);
-storn_err_tab = abs(y_ball - y_storn_b(end,1)) + abs(y_ball - y_storn_a(end,1));
+storn_err_tab = abs(y_ball - y_storn_b(end,1)) + abs(y_ball - y_storn_a(end,1))
 y_ball_storn = round(y_ball,2, "significant");
 storn_err_pres = abs(y_ball_storn-y_ball); %presentations fel
 

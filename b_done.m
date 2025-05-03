@@ -28,7 +28,7 @@ for i = 1:max_iter
     if i > 1
 
         dt = abs(t_hit - t_prev); %Trunkerings fel.
-        err_t = dt + t_err_int
+        err_t = dt + t_err_int;
         fel(i,:) = [h_t, t_hit, dt,t_err_int,err_t];
     else
         fel(i,:) = [h_t,t_hit,0,0,0];
@@ -47,8 +47,8 @@ round(t_hit,t_deci);
 t_err_pres = abs(t_hit - round(t_hit,t_deci)); %presentations fel
 
 %totala felet
-err_t_tot = t_err_pres + err_t
-t_hit_pres = round(t_hit,t_deci)
+err_t_tot = t_err_pres + err_t;
+t_hit_pres = round(t_hit,t_deci);
 h_t
 
 
@@ -206,7 +206,7 @@ ylabel('Avstånd mellan robot och kulan (m)')
 
 legend()
 
-matlab2tikz('Plot_distance_b.tex')
+%matlab2tikz('Plot_distance_b.tex')
 
 %Sparar informationen
 deltat = 1e-2; %Steglängd i tid
@@ -305,11 +305,16 @@ function index = find_time(t,y,h,limit)
 
 
     %Vill nu interpolera för punkterna innan och hitta t där d(t) = 0
-    plot(t(index-5:index+2),s(index-5:index+2), 'blue', t(index),s(index),'x')
+    %plot(t(index-5:index+2),s(index-5:index+2), 'blue', t(index),s(index),'x')
     
 end
 
 function c = poly(x,y,n)
+%Indata
+%x,y - punkter som vill interpoleras emellan
+%n - sökt gradtal
+%Utdata
+%c- vektor med koefficenterna för interpolationspolynomet
     if n == 1
         A = [x, x.^0];
         c = A\y;
